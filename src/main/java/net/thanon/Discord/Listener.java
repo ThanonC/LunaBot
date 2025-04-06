@@ -47,7 +47,7 @@ public class Listener extends ListenerAdapter {
                 .setColor(Color.MAGENTA)
                 .setTitle("Welcome too " + e.getGuild().getName())
                 .setDescription(m.getAsMention() + " good day and welcome on Lunar Anime, where you can stream thousands of animes for free\n\n You are number " + e.getGuild().getMemberCount() + "/" + e.getGuild().getMaxMembers() + " on our server")
-                .setImage("https://images-ext-1.discordapp.net/external/IgCKS8n02LtFPvbJ37TmkyjXHNNtdBtOIlXhdrMbBPw/%3Fcb%3D20161122231248%26path-prefix%3Dprotagonist/https/static.wikia.nocookie.net/p__/images/1/13/Luna.png/revision/latest?format=webp&width=819&height=786")
+                .setImage("https://i.imgur.com/Jp9w4wF.png")
                 .setThumbnail(m.getAvatarUrl())
                 .setFooter("Bot by ThanonGaming")
                 .build();
@@ -69,23 +69,28 @@ public class Listener extends ListenerAdapter {
                 e.getChannel().sendMessage("Rolled: " + Math.toIntExact((long) (Math.random() * 19 + 1))).queue();
             }
             case "create!disposable" -> {
-                e.getMessage().delete().queue();
+                if(e.getGuild().getTextChannelsByName("disposable", true).size() <= 9) {
+                    e.getMessage().delete().queue();
+                    e.getChannel().sendMessage("Created new disposable channel").queue();
                     e.getGuild().createTextChannel("disposable", e.getGuild().getCategoryById("1358438423291236453"))
                             .addPermissionOverride(e.getGuild().getPublicRole(), 0, Permission.VIEW_CHANNEL.getRawValue())
                             .addPermissionOverride(e.getMember(), Permission.VIEW_CHANNEL.getRawValue() | Permission.MESSAGE_SEND.getRawValue() | Permission.MESSAGE_HISTORY.getRawValue(), 0)
                             .setTopic("disposable text channel | " + e.getAuthor().getEffectiveName()).queue();
+                } else {
+                    e.getChannel().sendMessage("Error: Max disposable text channel amount reached").queue();
+                }
             }
 
             case "add!disposable" -> {
                 String[] args = e.getMessage().getContentRaw().split(" ");
-                if (args.length < 2) {
+                if (args.length < 3) {
                     e.getChannel().sendMessage("Please mention a user to add!").queue();
                     return;
                 }
 
                 TextChannel channel = e.getChannel().asTextChannel();
 
-                if (channel.getTopic() != null && channel.getTopic().contains(e.getAuthor().getName())) {
+                /*if (channel.getTopic() != null && channel.getTopic().contains(e.getAuthor().getName())) {
                     channel.upsertPermissionOverride(e.getGuild().getMember(UserSnowflake.fromId(e.getMember().getAsMention())))
                             .setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND)
                             .queue(
@@ -94,7 +99,7 @@ public class Listener extends ListenerAdapter {
                             );
                 } else {
                     e.getChannel().sendMessage("You can't modify this channel.").queue();
-                }
+                }*/
             }
 
             case "delete!disposable" -> {
@@ -106,6 +111,15 @@ public class Listener extends ListenerAdapter {
             case "delete!disposable_all" -> {
                 e.getMessage().delete().queue();
                 e.getGuild().getTextChannelsByName("disposable", true).get(e.getGuild().getTextChannelsByName("disposable", true).toArray().length-1).delete().queue();
+            }
+
+            case "ai!info" -> {
+                e.getChannel().sendMessageFormat("Apollo Ai by ThanonGaming is not being incorporated here. This system uses a whole different Ai know as %s. Apollo Ai was started on 29/03/2025 while this one started on 07/04/2025", null).queue();
+            }
+        }
+        if(e.getMessage().getContentRaw().contains("ai!input")) {
+            if(!e.getMessage().getAuthor().isBot()) {
+                e.getChannel().sendMessageFormat("Currently still work in progress. %s", e.getMessage().getContentRaw().replace("ai!input", "")).queue();
             }
         }
         super.onMessageReceived(e);
