@@ -113,7 +113,7 @@ public class Request {
                             .setColor(Color.BLACK)
                             .build();
 
-                    g.getTextChannelById(channelId).sendMessageEmbeds(embed2).addActionRow(Button.link("https://lunaranime.com/anime/" + firstEntry.getString("slug"), "Watch it now on Lunar Anime")).queue();
+                    g.getTextChannelById(channelId).sendMessageEmbeds(embed2).addActionRow(Button.link("https://lunaranime.com/anime/" + firstEntry.getString("slug"), "Watch it now on Lunar Anime")).queue();*/
 
                     MessageEmbed embed3 = new EmbedBuilder()
                             .setTitle(firstEntry.getString("title"), "https://lunaranime.com/anime/" + firstEntry.getString("slug"))
@@ -122,11 +122,11 @@ public class Request {
                             .setUrl("https://lunaranime.com/anime/" + firstEntry.getString("slug"))
                             .build();
 
-                    g.getTextChannelById(channelId).sendMessageEmbeds(embed3).queue();*/
+                    g.getTextChannelById(channelId).sendMessageEmbeds(embed3).queue();
                 } else {
                     g.getTextChannelById(channelId).sendMessage("No data available in the response").queue();
                 }
-                g.getTextChannelById(channelId).sendMessage(dataArray.toString()).queue();
+                //g.getTextChannelById(channelId).sendMessage(dataArray.toString()).queue();
             } else {
                 g.getTextChannelById(channelId).sendMessage("GET request failed. Response Code: " + responseCode).queue();
             }

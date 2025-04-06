@@ -26,7 +26,8 @@ public class Bot {
                 Commands.slash("find", "Finds an anime for you on Lunar Anime")
                         .addOption(OptionType.STRING, "name", "the name of the anime", true),
                 Commands.slash("level", "Episodes watched + user level")
-                        .addOption(OptionType.STRING, "name", "user name", true)
+                        .addOption(OptionType.STRING, "name", "user name", true),
+                Commands.slash("report", "report a bug")
         ).queue();
     }
 }
