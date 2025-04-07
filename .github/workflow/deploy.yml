@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy Code
         run: |
-          ssh thanon@raspberry 'cd /luna && git pull'
+          ssh thanon@raspberry 'cd /home/thanon/Desktop/luna && git pull'
