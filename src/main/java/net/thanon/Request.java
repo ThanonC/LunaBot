@@ -137,6 +137,7 @@ public class Request {
 
     public void levelUpMessage(String name, Guild g, String channelId) {
         String apiUrl = "https://oblivion.wtf/api/animes/watched/count?username=" + name;
+        String apiUrl2 = "https://oblivion.wtf/api/animes/watched/count?username=" + name;
         try {
             // Create a URL object
             URL url = new URL(apiUrl);

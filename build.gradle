@@ -7,12 +7,14 @@ version = '1.0'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     implementation("net.dv8tion:JDA:5.3.1")
     implementation("org.json:json:20250107")
     implementation("io.github.cdimascio:dotenv-java:3.2.0")
+    implementation("dev.arbjerg:lavaplayer:2.2.3")
 }
 
 test {

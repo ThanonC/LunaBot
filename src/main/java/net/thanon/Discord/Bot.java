@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.thanon.Music.MusicListener;
 
 import java.time.Duration;
 
@@ -18,6 +19,7 @@ public class Bot {
         JDA jda = JDABuilder.createDefault(env.get("token"))
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(new Listener())
+                .addEventListeners(new MusicListener())
                 .build().awaitReady();
 
         CommandListUpdateAction commands = jda.updateCommands();
@@ -27,7 +29,8 @@ public class Bot {
                         .addOption(OptionType.STRING, "name", "the name of the anime", true),
                 Commands.slash("level", "Episodes watched + user level")
                         .addOption(OptionType.STRING, "name", "user name", true),
-                Commands.slash("report", "report a bug")
+                Commands.slash("report", "report a bug"),
+                Commands.slash("commands", "gives a list of all commands")
         ).queue();
     }
 }

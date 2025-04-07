@@ -7,13 +7,16 @@ import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.managers.AudioManager;
 import net.thanon.Request;
 import net.thanon.Utils.Config;
 
@@ -35,6 +38,14 @@ public class Listener extends ListenerAdapter {
             }
             case "report" -> {
                 e.getChannel().sendMessage("You can report bugs on: https://lunaranime.com/report").queue();
+            }
+            case "commands" -> {
+                MessageEmbed embed = new EmbedBuilder()
+                        .setColor(Color.magenta)
+                        .setTitle("Command list of " + e.getJDA().getSelfUser().getName())
+                        .setDescription("**Slash**\n/find {name} - helps you find an anime (Works, but still being worked on to improve it)\n/level {name} - Find out which level a person is\n/report - brings you to the official report page of Lunar Anime\n\n**Disposable Chat commands**\ncreate!disposable - creates a new disposable channel\ndelete!disposable - lets you delete a disposable channel (you have to be the owner of that channel)\nadd!disposable - lets you add a person to your personal disposable channel\n\n**Music commands**\n?join - joins the users voice channel (currently still work in progress, it only joins: <#1358824476602794136>)\n?leave - makes the bot leave the current channel")
+                        .build();
+                e.deferReply().addEmbeds(embed).queue();
             }
         }
         super.onSlashCommandInteraction(e);
@@ -83,15 +94,15 @@ public class Listener extends ListenerAdapter {
 
             case "add!disposable" -> {
                 String[] args = e.getMessage().getContentRaw().split(" ");
-                if (args.length < 3) {
+                if (args.length < 2) {
                     e.getChannel().sendMessage("Please mention a user to add!").queue();
                     return;
                 }
 
                 TextChannel channel = e.getChannel().asTextChannel();
 
-                /*if (channel.getTopic() != null && channel.getTopic().contains(e.getAuthor().getName())) {
-                    channel.upsertPermissionOverride(e.getGuild().getMember(UserSnowflake.fromId(e.getMember().getAsMention())))
+                if (channel.getTopic().contains(e.getAuthor().getEffectiveName())) {
+                    channel.upsertPermissionOverride(e.getGuild().getMemberById(args[2]))
                             .setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND)
                             .queue(
                                     success -> e.getChannel().sendMessage("User added to the channel!").queue(),
@@ -99,7 +110,7 @@ public class Listener extends ListenerAdapter {
                             );
                 } else {
                     e.getChannel().sendMessage("You can't modify this channel.").queue();
-                }*/
+                }
             }
 
             case "delete!disposable" -> {
@@ -119,7 +130,7 @@ public class Listener extends ListenerAdapter {
         }
         if(e.getMessage().getContentRaw().contains("ai!input")) {
             if(!e.getMessage().getAuthor().isBot()) {
-                e.getChannel().sendMessageFormat("Currently still work in progress. %s", e.getMessage().getContentRaw().replace("ai!input", "")).queue();
+                e.getChannel().sendMessageFormat("Currently still work in progress. You entered: %s", e.getMessage().getContentRaw().replace("ai!input", "")).queue();
             }
         }
         super.onMessageReceived(e);
